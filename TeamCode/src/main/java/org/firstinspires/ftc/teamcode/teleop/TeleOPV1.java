@@ -32,6 +32,7 @@ public class TeleOPV1 extends LinearOpMode {
             drive.joystick(gamepad1);
             accessories.lift(gamepad2);
             accessories.foundationMover(gamepad2.a);
+            accessories.claw(gamepad2.b);
         }
     }
 

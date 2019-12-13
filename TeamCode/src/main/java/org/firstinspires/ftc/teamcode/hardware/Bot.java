@@ -13,6 +13,7 @@ public class Bot {
     private DcMotor rightDrive;
     private DcMotor linearLift;
     private Servo foundationMover;
+    private Servo claw;
     private Drive drive;
     private Accessories accessories;
 
@@ -37,6 +38,10 @@ public class Bot {
         return linearLift;
     }
 
+    public Servo getClaw() {
+        return claw;
+    }
+
     public Servo getFoundationMover() {
         return foundationMover;
     }
@@ -55,8 +60,9 @@ public class Bot {
         rightDrive = map.get(DcMotor.class, "rightDrive");
         linearLift = map.get(DcMotor.class, "linearLift");
         foundationMover = map.get(Servo.class, "foundationMover");
+        claw = map.get(Servo.class, "claw");
 
-        rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         drive = new Drive(leftDrive, rightDrive);
         accessories = new Accessories().init(this);

@@ -26,8 +26,24 @@ public class Drive {
     }
 
     public void joystick(Gamepad pad) {
-        double left_stick_y = pad.left_stick_y;
-        double right_stick_y = pad.right_stick_y;
+       /* double left_stick_y = pad.left_stick_y;
+        double left_stick_x = pad.left_stick_x;
+
+        boolean isTilt = left_stick_x <= -.15d || left_stick_x >= .15d;
+        if (isTilt) {
+            if (left_stick_x < 0) {
+                leftDrive.setPower(Math.min(left_stick_x, left_stick_y));
+                rightDrive.setPower(Math.max(left_stick_x, left_stick_y));
+                return;
+            } else {
+                leftDrive.setPower(Math.max(left_stick_x, left_stick_y));
+                rightDrive.setPower(Math.min(left_stick_x, left_stick_y));
+                return;
+            }
+        }*/
+
+       double left_stick_y = pad.left_stick_y;
+       double right_stick_y = pad.right_stick_y;
         leftDrive.setPower(left_stick_y);
         rightDrive.setPower(right_stick_y);
     }
