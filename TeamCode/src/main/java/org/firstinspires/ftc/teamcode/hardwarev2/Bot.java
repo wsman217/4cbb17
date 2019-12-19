@@ -48,6 +48,8 @@ public class Bot {
         foundationMoverRight = map.get(Servo.class, "foundationRight");*/
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         drive = new Drive(this);
         /*accessories = new Accessories().init(this);*/
@@ -66,51 +68,51 @@ public class Bot {
         return drive;
     }
 
-    public DcMotor getLeftFront() {
+    DcMotor getLeftFront() {
         return leftFront;
     }
 
-    public DcMotor getRightFront() {
+    DcMotor getRightFront() {
         return rightFront;
     }
 
-    public DcMotor getLeftBack() {
+    DcMotor getLeftBack() {
         return leftBack;
     }
 
-    public DcMotor getRightBack() {
+    DcMotor getRightBack() {
         return rightBack;
     }
 
-    public Accessories getAccessories() {
+    Accessories getAccessories() {
         return accessories;
     }
 
-    public DcMotor getIntakeLeft() {
+    DcMotor getIntakeLeft() {
         return intakeLeft;
     }
 
-    public DcMotor getIntakeRight() {
+    DcMotor getIntakeRight() {
         return intakeRight;
     }
 
-    public Servo getIntakeLiftLeft() {
+    Servo getIntakeLiftLeft() {
         return intakeLiftLeft;
     }
 
-    public Servo getIntakeLiftRight() {
+    Servo getIntakeLiftRight() {
         return intakeLiftRight;
     }
 
-    public Servo getFoundationMoverLeft() {
+    Servo getFoundationMoverLeft() {
         return foundationMoverLeft;
     }
 
-    public Servo getFoundationMoverRight() {
+    Servo getFoundationMoverRight() {
         return foundationMoverRight;
     }
 
-    public OpMode getOpMode() {
+    OpMode getOpMode() {
         return opMode;
     }
 
