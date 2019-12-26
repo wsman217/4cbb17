@@ -16,6 +16,8 @@ public class Interpreter {
 
     public Interpreter(OpMode opMode) throws FileNotFoundException {
         this.opMode = opMode;
+        opMode.telemetry.addLine("Start of interpreter.");
+        opMode.telemetry.update();
         String PATH = "/storage/self/primary/FIRST/";
         File configFile = new File("/storage/self/primary/FIRST/scriptConfig.txt");
         if (!configFile.exists())
@@ -38,17 +40,24 @@ public class Interpreter {
             throwException();
         while (activeScript.hasNext())
             this.commands.push(activeScript.next().toLowerCase());
+        opMode.telemetry.addLine("Finished gathering commands.");
+        opMode.telemetry.update();
     }
 
     public void executeNextCommand() throws ScriptException {
         if (!filesFound)
             throwException();
         String command = commands.removeFirst();
+        opMode.telemetry.addLine("Command: " + command);
+        opMode.telemetry.update();
         if (command.startsWith("//") || command.length() <= 0)
             return;
         for (Commands cmd : Commands.values()) {
-            if (!command.startsWith(cmd + ""))
+            opMode.telemetry.addLine("Commands enum: " + cmd);
+            opMode.telemetry.update();
+            if (!command.startsWith(cmd.getCommand() + ""))
                 continue;
+            opMode.telemetry.addLine("Past starts with check.");
             if (cmd == Commands.DRIVE) {
                 opMode.telemetry.addLine("Got to the drive command.");
                 opMode.telemetry.update();
