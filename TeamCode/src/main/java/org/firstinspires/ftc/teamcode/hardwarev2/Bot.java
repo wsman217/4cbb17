@@ -18,7 +18,7 @@ public class Bot {
     private DcMotor rightBack;
 
     private Accessories accessories;
-    //private DcMotor linearLift;
+    private DcMotor lift;
     //private Servo claw;
     private DcMotor intakeLeft;
     private DcMotor intakeRight;
@@ -26,6 +26,7 @@ public class Bot {
     private Servo intakeLiftRight;
     private Servo foundationMoverLeft;
     private Servo foundationMoverRight;
+    private Servo claw, capstone, clawSwing;
 
     private OpMode opMode;
 
@@ -36,6 +37,7 @@ public class Bot {
         rightFront = map.get(DcMotor.class, "rightFront");
         leftBack = map.get(DcMotor.class, "leftBack");
         rightBack = map.get(DcMotor.class, "rightBack");
+        //lift = map.get(DcMotor.class, "lift");
         //linearLift = map.get(DcMotor.class, "linearLift");
         //foundationMover = map.get(Servo.class, "foundationMover");
         //claw = map.get(Servo.class, "claw");
@@ -43,16 +45,18 @@ public class Bot {
         /*intakeLeft = map.get(DcMotor.class, "intakeLeft");
         intakeRight = map.get(DcMotor.class, "intakeRight");
         intakeLiftLeft = map.get(Servo.class, "intakeLiftLeft");
-        intakeLiftRight = map.get(Servo.class, "intakeLiftRight");
+        intakeLiftRight = map.get(Servo.class, "intakeLiftRight");*/
         foundationMoverLeft = map.get(Servo.class, "foundationLeft");
-        foundationMoverRight = map.get(Servo.class, "foundationRight");*/
-
+        foundationMoverRight = map.get(Servo.class, "foundationRight");
+        claw = map.get(Servo.class, "claw");
+        capstone = map.get(Servo.class, "capstone");
+        clawSwing = map.get(Servo.class, "clawSwing");
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         drive = new Drive(this);
-        /*accessories = new Accessories().init(this);*/
+        accessories = new Accessories().init(this);
         return this;
     }
 
@@ -84,7 +88,7 @@ public class Bot {
         return rightBack;
     }
 
-    Accessories getAccessories() {
+    public Accessories getAccessories() {
         return accessories;
     }
 
@@ -116,4 +120,19 @@ public class Bot {
         return opMode;
     }
 
+    public DcMotor getLift() {
+        return lift;
+    }
+
+    public Servo getClaw() {
+        return claw;
+    }
+
+    public Servo getCapstone() {
+        return capstone;
+    }
+
+    public Servo getClawSwing() {
+        return clawSwing;
+    }
 }

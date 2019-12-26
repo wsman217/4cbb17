@@ -52,6 +52,7 @@ public class Move extends LinearOpMode {
             }
             this.bot.getLeftDrive().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             this.bot.getRightFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
+            this.bot.getDrive();
         }
     }
 }

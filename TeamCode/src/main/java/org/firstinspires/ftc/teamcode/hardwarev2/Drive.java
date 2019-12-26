@@ -12,10 +12,11 @@ public class Drive {
     private LinearOpMode opMode;
     private Telemetry telem;
 
-    private static final double COUNTS_PER_MOTOR_REV = 28d;
-    private static final double GEAR_RATIO = 19.2;
-    private static final double WHEEL_DIAMETER_MM = 96d;
-    private static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV * GEAR_RATIO) / (WHEEL_DIAMETER_MM * 3.1415);
+    /*private static final double COUNTS_PER_MOTOR_REV = 28d;
+    private static final double GEAR_RATIO = 21.52d;
+    private static final double WHEEL_DIAMETER_MM = 100d;
+    private static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV * GEAR_RATIO) / (WHEEL_DIAMETER_MM * 3.1415);*/
+    private static final double COUNTS_PER_MM = 1.7585741331;
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -78,20 +79,17 @@ public class Drive {
         rightBack.setTargetPosition(bRTarget);
 
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         time.reset();
+        speed = Math.abs(speed);
+        setPower(speed, speed, speed, speed);
 
-        leftFront.setPower(speed);
-        rightFront.setPower(speed);
-        leftBack.setPower(speed);
-        rightBack.setPower(speed);
-
-        while (opMode.opModeIsActive() && time.seconds() < timeout && leftFront.isBusy() && rightFront.isBusy() &&
-                leftBack.isBusy() && rightBack.isBusy()) {
+        while (opMode.opModeIsActive() && (time.seconds() < timeout) && (leftFront.isBusy() && rightFront.isBusy() &&
+                leftBack.isBusy() && rightBack.isBusy())) {
             telem.addData("Path1", "Running to %7d :%7d :%7d :%7d", fLTarget, fRTarget, bLTarget, bRTarget);
             telem.update();
         }
 
+        setPower(0, 0, 0, 0);
         setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
     }
 
@@ -100,17 +98,37 @@ public class Drive {
 
         if (direction == StrafeDirection.LEFT) {
             //TODO I need to figure out the directions the motors move for left strafe
+            //Left needs to go in right needs to go out
         } else if (direction == StrafeDirection.RIGHT) {
             //TODO Figure out the direction the motors move for right strafe
+            //Left needs to go out right needs to go in
         } else if (direction == StrafeDirection.LEFT_FRONT) {
             //TODO Figure out which motors move to go front left
+            //Backleft frontright
         } else if (direction == StrafeDirection.RIGHT_FRONT) {
             //TODO Figure out which motors move to go front right
+            //Frontleft backright
         } else if (direction == StrafeDirection.LEFT_BACK) {
             //TODO Figure out which motors move to go back left
+            //Frontleft backright
         } else if (direction == StrafeDirection.RIGHT_BACK) {
             //TODO Figure out which motors move to go back right
+            //backleft frontright
         }
+    }
+
+    private void setPower(double fl, double fr, double bl, double br) {
+        leftFront.setPower(fl);
+        rightFront.setPower(fr);
+        leftBack.setPower(bl);
+        rightBack.setPower(br);
+    }
+
+    private void setNoPower(DcMotor.ZeroPowerBehavior behave) {
+        leftFront.setZeroPowerBehavior(behave);
+        rightFront.setZeroPowerBehavior(behave);
+        leftBack.setZeroPowerBehavior(behave);
+        rightBack.setZeroPowerBehavior(behave);
     }
 
     private void setMode(DcMotor.RunMode mode) {

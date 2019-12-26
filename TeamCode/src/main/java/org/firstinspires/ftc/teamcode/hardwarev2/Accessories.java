@@ -11,29 +11,40 @@ import java.util.HashMap;
 
 public class Accessories {
 
-    private static boolean isFoundDown, isIntakeLiftDown;
-    private static long lastClickedFoundation, lastClickedIntakeLift;
+    private static boolean isFoundDown, isIntakeLiftDown, isSwingForward, isClawGripping;
+    private static long lastClickedFoundation, lastClickedIntakeLift, lastClickedSwingClaw, lastClickedClaw;
     //private DcMotor linearLift;
     private Servo foundationMoverLeft, foundationMoverRight, intakeLiftLeft, intakeLiftRight;
+    private Servo claw, capstone, clawSwing;
     private DcMotor leftIntake, rightIntake;
+    private DcMotor lift;
     private OpMode opMode;
 
     Accessories init(Bot bot) {
         this.opMode = bot.getOpMode();
-        isFoundDown = false;
-        isIntakeLiftDown = false;
+        isFoundDown = true;
+        isIntakeLiftDown = true;
+        isSwingForward = false;
+        isClawGripping = true;
         lastClickedFoundation = System.currentTimeMillis() / 1000;
         lastClickedIntakeLift = System.currentTimeMillis() / 1000;
+        lastClickedClaw = System.currentTimeMillis() / 1000;
+        lastClickedSwingClaw = System.currentTimeMillis() / 1000;
 
         this.foundationMoverLeft = bot.getFoundationMoverLeft();
         this.foundationMoverRight = bot.getFoundationMoverRight();
-        this.intakeLiftLeft = bot.getIntakeLiftLeft();
+        this.claw = bot.getClaw();
+        this.capstone = bot.getCapstone();
+        this.clawSwing = bot.getClawSwing();
+       /* this.intakeLiftLeft = bot.getIntakeLiftLeft();
         this.intakeLiftRight = bot.getIntakeLiftRight();
         this.leftIntake = bot.getIntakeLeft();
-        this.rightIntake = bot.getIntakeRight();
+        this.rightIntake = bot.getIntakeRight();*/
+
+        //this.lift = bot.getLift();
 
         //Set intake directions
-        leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+        /*leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);*/
 
         //Set foundation movers to their up positions.
 
@@ -42,22 +53,45 @@ public class Accessories {
         return this;
     }
 
+    public void swingClaw() {
+        long currentTime = System.currentTimeMillis() / 1000;
+        long diff = currentTime - lastClickedSwingClaw;
+        if (diff <= .5)
+            return;
+        lastClickedSwingClaw = currentTime;
+        double target = isSwingForward ? 0 : 1;
+        isSwingForward = !isSwingForward;
+        clawSwing.setPosition(target);
+    }
+
+    public void switchClaw() {
+        long currentTime = System.currentTimeMillis() / 1000;
+        long diff = currentTime - lastClickedClaw;
+        if (diff <= .5)
+            return;
+        lastClickedClaw = currentTime;
+        double target = isClawGripping ? 0 : 1;
+        isClawGripping = !isClawGripping;
+        claw.setPosition(target);
+    }
+
+    public void dropCapstone() {
+        opMode.telemetry.addLine("Dropping cap");
+        opMode.telemetry.update();
+        capstone.setPosition(0);
+    }
+
     public void switchFoundationMover() {
         long currentTime = System.currentTimeMillis() / 1000;
         long diff = currentTime - lastClickedFoundation;
         if (diff <= .5)
             return;
         lastClickedFoundation = currentTime;
-        double place = isFoundDown ? 1 : -100;
+        double leftTarget = isFoundDown ? 0 : 1;
+        double rightTarget = isFoundDown ? 0 : .5;
         isFoundDown = !isFoundDown;
-        opMode.telemetry.addLine("Place: " + place + " negPlace: " + -place + " isFoundDown:" + isFoundDown +
-                " foundationMoverLeft: " + foundationMoverLeft);
-        opMode.telemetry.addLine("foundationMoverLeft: " + foundationMoverLeft.getPosition() +
-                " foundationMoverRight: " + foundationMoverRight.getPosition());
-
-        opMode.telemetry.update();
-        foundationMoverLeft.setPosition(-place);
-        foundationMoverRight.setPosition(place);
+        foundationMoverLeft.setPosition(leftTarget);
+        foundationMoverRight.setPosition(rightTarget);
     }
 
     public void switchIntakePositions() {
@@ -80,6 +114,11 @@ public class Accessories {
         }
     }
 
+    public void lift(Gamepad pad) {
+        double liftSpeed = -pad.right_stick_y;
+        lift.setPower(liftSpeed);
+    }
+
     public void intake(Gamepad pad) {
         double intakeSpeed = -pad.left_stick_y;
         leftIntake.setPower(intakeSpeed);
@@ -99,7 +138,7 @@ public class Accessories {
         return new SwitchHelper(!booToUse, currentTime);
     }
 
-    class SwitchHelper {
+    static class SwitchHelper {
         boolean newBoo;
         long newLong;
 
