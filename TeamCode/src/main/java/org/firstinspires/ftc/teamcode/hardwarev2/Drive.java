@@ -65,18 +65,36 @@ public class Drive {
     public void drive(double speed, double distanceInMM, double timeout) {
         if (!opMode.opModeIsActive())
             return;
-        telem.addData(">", "Drive method values: Speed-" + speed + ", DistanceInMM-" + distanceInMM + ", Timeout-" + timeout);
-        telem.update();
+        int target = ((int) (distanceInMM * COUNTS_PER_MM));
+        moveMotors(target, target, target, target, speed, timeout);
+    }
 
-        int fLTarget = leftFront.getCurrentPosition() + ((int) (distanceInMM * COUNTS_PER_MM));
-        int fRTarget = rightFront.getCurrentPosition() + ((int) (distanceInMM * COUNTS_PER_MM));
-        int bLTarget = leftBack.getCurrentPosition() + ((int) (distanceInMM * COUNTS_PER_MM));
-        int bRTarget = rightBack.getCurrentPosition() + ((int) (distanceInMM * COUNTS_PER_MM));
+    public void strafe(StrafeDirection direction, double speed, double distanceInMM, double timeout) {
+        if (!opMode.opModeIsActive())
+            return;
+        int target = ((int) (distanceInMM * COUNTS_PER_MM));
 
-        leftFront.setTargetPosition(fLTarget);
-        rightFront.setTargetPosition(fRTarget);
-        leftBack.setTargetPosition(bLTarget);
-        rightBack.setTargetPosition(bRTarget);
+        if (direction == StrafeDirection.FORWARD || direction == StrafeDirection.BACKWARD)
+            drive(speed, distanceInMM, timeout);
+        if (direction == StrafeDirection.LEFT)
+            moveMotors(-target, target, target, -target, speed, timeout);
+        else if (direction == StrafeDirection.RIGHT)
+            moveMotors(target, -target, -target, target,speed, timeout);
+        else if (direction == StrafeDirection.LEFT_FRONT)
+            moveMotors(0, target, target, 0, speed, timeout);
+        else if (direction == StrafeDirection.RIGHT_FRONT)
+            moveMotors(target, 0, 0, target, speed, timeout);
+        else if (direction == StrafeDirection.LEFT_BACK)
+            moveMotors(-target, 0, 0, target, speed, -timeout);
+        else if (direction == StrafeDirection.RIGHT_BACK)
+            moveMotors(0, -target, -target, 0, speed, timeout);
+    }
+
+    private void moveMotors(int fLTarget, int fRTarget, int bLTarget, int bRTarget, double speed, double timeout) {
+        leftFront.setTargetPosition(leftFront.getCurrentPosition() + fLTarget);
+        rightFront.setTargetPosition(rightFront.getCurrentPosition() + fRTarget);
+        leftBack.setTargetPosition(leftBack.getCurrentPosition() + bLTarget);
+        rightBack.setTargetPosition(rightBack.getCurrentPosition() + bRTarget);
 
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
         time.reset();
@@ -91,30 +109,6 @@ public class Drive {
 
         setPower(0, 0, 0, 0);
         setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
-    }
-
-    public void strafe(StrafeDirection direction, double speed, double distanceInMM, double timeout) {
-        int target = ((int) (distanceInMM * COUNTS_PER_MM));
-
-        if (direction == StrafeDirection.LEFT) {
-            //TODO I need to figure out the directions the motors move for left strafe
-            //Left needs to go in right needs to go out
-        } else if (direction == StrafeDirection.RIGHT) {
-            //TODO Figure out the direction the motors move for right strafe
-            //Left needs to go out right needs to go in
-        } else if (direction == StrafeDirection.LEFT_FRONT) {
-            //TODO Figure out which motors move to go front left
-            //Backleft frontright
-        } else if (direction == StrafeDirection.RIGHT_FRONT) {
-            //TODO Figure out which motors move to go front right
-            //Frontleft backright
-        } else if (direction == StrafeDirection.LEFT_BACK) {
-            //TODO Figure out which motors move to go back left
-            //Frontleft backright
-        } else if (direction == StrafeDirection.RIGHT_BACK) {
-            //TODO Figure out which motors move to go back right
-            //backleft frontright
-        }
     }
 
     private void setPower(double fl, double fr, double bl, double br) {
@@ -138,12 +132,40 @@ public class Drive {
         rightBack.setMode(mode);
     }
 
-    enum StrafeDirection {
+    public enum StrafeDirection {
+        FORWARD,
+        BACKWARD,
         LEFT_FRONT,
         LEFT_BACK,
         RIGHT_FRONT,
         RIGHT_BACK,
         LEFT,
         RIGHT;
+
+        public static StrafeDirection searchDirection(int dir) {
+            switch (dir) {
+                case 12:
+                    return FORWARD;
+                case 1:
+                case 2:
+                    return RIGHT_FRONT;
+                case 3:
+                    return RIGHT;
+                case 4:
+                case 5:
+                    return RIGHT_BACK;
+                case 6: return BACKWARD;
+                case 7:
+                case 8:
+                    return LEFT_BACK;
+                case 9:
+                    return LEFT;
+                case 10:
+                case 11:
+                    return LEFT_FRONT;
+                default:
+                    return null;
+            }
+        }
     }
 }
