@@ -101,8 +101,8 @@ public class Drive {
         speed = Math.abs(speed);
         setPower(speed, speed, speed, speed);
 
-        while (opMode.opModeIsActive() && (time.seconds() < timeout) && (leftFront.isBusy() && rightFront.isBusy() &&
-                leftBack.isBusy() && rightBack.isBusy())) {
+        while (opMode.opModeIsActive() && (time.seconds() < timeout) && ((leftFront.isBusy() || fLTarget == 0) && (rightFront.isBusy() || fRTarget == 0) &&
+                (leftBack.isBusy() || bLTarget == 0) && (rightBack.isBusy() || bRTarget == 0))) {
             telem.addData("Path1", "Running to %7d :%7d :%7d :%7d", fLTarget, fRTarget, bLTarget, bRTarget);
             telem.update();
         }

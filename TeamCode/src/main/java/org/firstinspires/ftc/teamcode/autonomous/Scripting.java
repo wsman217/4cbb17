@@ -25,14 +25,15 @@ public class Scripting extends LinearOpMode {
 
         waitForStart();
         if (opModeIsActive()) {
+            telemetry.addLine("Am I here?");
+            telemetry.update();
             try {
-                interpreter.executeNextCommand();
-                while (time.seconds() < 5)
-                    System.out.print(".");
-                interpreter.executeNextCommand();
-                while (time.seconds() < 5)
-                    System.out.print(".");
+                while(interpreter.hasNext()) {
+                    interpreter.executeNextCommand();
+                }
             } catch (Exception e) {
+                telemetry.addLine("uh oh");
+                telemetry.update();
                 e.printStackTrace();
             }
         }

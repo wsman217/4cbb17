@@ -12,6 +12,7 @@ public class Accessories {
     private static long lastClickedClaw;
     private DcMotor linearLift;
     private Servo foundationMover, claw;
+    private DcMotor intakeLeft, intakeRight;
     int counter = 0;
 
     //private TeleOPV1 main;
@@ -22,6 +23,9 @@ public class Accessories {
         this.linearLift = bot.getLinearLift();
         this.foundationMover = bot.getFoundationMover();
         this.claw = bot.getClaw();
+
+        intakeLeft = bot.getIntakeLeft();
+        intakeRight = bot.getIntakeRight();
 
         this.linearLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         foundationMover.setPosition(-1);

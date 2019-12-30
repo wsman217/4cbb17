@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.script;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.autonomous.script.exceptions.ParameterException;
 import org.firstinspires.ftc.teamcode.autonomous.script.exceptions.ScriptException;
 import org.firstinspires.ftc.teamcode.hardwarev2.Bot;
@@ -8,10 +9,7 @@ import org.firstinspires.ftc.teamcode.hardwarev2.Drive;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Interpreter {
 
@@ -48,15 +46,23 @@ public class Interpreter {
     public void gatherCommands() throws ScriptException {
         if (!filesFound)
             throwScriptException();
-        while (activeScript.hasNext())
-            this.commands.push(activeScript.next().toLowerCase());
-        opMode.telemetry.addLine("Finished gathering commands.");
+        while (activeScript.hasNext()) {
+            String activeLine = activeScript.nextLine().toLowerCase();
+            opMode.telemetry.addLine(activeLine);
+            opMode.telemetry.update();
+            if (!activeLine.startsWith("//"))
+                this.commands.add(activeLine);
+        }
+        opMode.telemetry.addLine("Finished gathering commands." + commands.toString());
         opMode.telemetry.update();
     }
 
     public void executeNextCommand() throws ScriptException, ParameterException {
-        if (!filesFound)
+        if (!filesFound) {
+            opMode.telemetry.addLine("Well fuck I got to here");
+            opMode.telemetry.update();
             throwScriptException();
+        }
         String cmdAndParams = commands.removeFirst().toLowerCase();
         if (cmdAndParams.length() <= 0)
             return;
@@ -68,20 +74,34 @@ public class Interpreter {
         for (Commands cmd : Commands.values()) {
             if (!command.startsWith(cmd.getCommand() + ""))
                 continue;
-
+            opMode.telemetry.addLine(parameters.toString());
+            opMode.telemetry.update();
             if (cmd == Commands.DRIVE) {
                 //Syntax: drive(speed<0-1>, distance<pos:forward, neg:backward>, timeout)
                 if (!checkParams(parameters, 3))
                     throwParamException(cmdAndParams);
+                opMode.telemetry.addLine("Command is drive.");
                 drive.drive(parseDouble(parameters.get(0)), parseDouble(parameters.get(1)), parseDouble(parameters.get(2)));
             } else if (cmd == Commands.STRAFE) {
                 //Syntax: strafe(direction<(like a clock) 12:forward, 1-2:forwardRight, 3:right, so on>, speed<0-1>, distance<pos:forward, neg:backward>, timeout)
                 if (!checkParams(parameters, 4))
                     throwParamException(cmdAndParams);
                 Drive.StrafeDirection direction = Drive.StrafeDirection.searchDirection((int) parseDouble(parameters.get(0)));
+                opMode.telemetry.addLine("Command is strafe.");
                 drive.strafe(direction, parseDouble(parameters.get(1)), parseDouble(parameters.get(2)), parseDouble(parameters.get(3)));
+            } else if (cmd == Commands.PAUSE) {
+                if (!checkParams(parameters, 1))
+                    throwParamException(cmdAndParams);
+                ElapsedTime time = new ElapsedTime();
+                int counter = 0;
+                while (time.seconds() <= parseDouble(parameters.get(0)))
+                    counter++;
             }
         }
+    }
+
+    public boolean hasNext() {
+        return commands.size() != 0;
     }
 
     private void throwScriptException() throws ScriptException {
@@ -99,10 +119,10 @@ public class Interpreter {
     private boolean checkParams(LinkedList<String> params, int numParams) {
         if (params.size() != numParams)
             return false;
-        return testParamsAsNumbers((String[]) Objects.requireNonNull(params.toArray()));
+        return testParamsAsNumbers(new ArrayList<>(params));
     }
 
-    private boolean testParamsAsNumbers(String[] strings) {
+    private boolean testParamsAsNumbers(ArrayList<String> strings) {
         boolean allNumbers = true;
         for (String toTest : strings)
             allNumbers &= isNumber(toTest);
@@ -129,6 +149,12 @@ public class Interpreter {
             @Override
             public String getCommand() {
                 return "strafe";
+            }
+        },
+        PAUSE() {
+            @Override
+            public String getCommand() {
+                return "pause";
             }
         };
         abstract String getCommand();

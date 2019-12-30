@@ -37,15 +37,12 @@ public class Bot {
         rightFront = map.get(DcMotor.class, "rightFront");
         leftBack = map.get(DcMotor.class, "leftBack");
         rightBack = map.get(DcMotor.class, "rightBack");
-        //lift = map.get(DcMotor.class, "lift");
-        //linearLift = map.get(DcMotor.class, "linearLift");
-        //foundationMover = map.get(Servo.class, "foundationMover");
-        //claw = map.get(Servo.class, "claw");
+        lift = map.get(DcMotor.class, "lift");
 
-        /*intakeLeft = map.get(DcMotor.class, "intakeLeft");
+        intakeLeft = map.get(DcMotor.class, "intakeLeft");
         intakeRight = map.get(DcMotor.class, "intakeRight");
         intakeLiftLeft = map.get(Servo.class, "intakeLiftLeft");
-        intakeLiftRight = map.get(Servo.class, "intakeLiftRight");*/
+        intakeLiftRight = map.get(Servo.class, "intakeLiftRight");
         foundationMoverLeft = map.get(Servo.class, "foundationLeft");
         foundationMoverRight = map.get(Servo.class, "foundationRight");
         claw = map.get(Servo.class, "claw");

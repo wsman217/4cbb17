@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.teleop.TeleOPV2;
 
 import java.util.HashMap;
 
@@ -36,19 +35,19 @@ public class Accessories {
         this.claw = bot.getClaw();
         this.capstone = bot.getCapstone();
         this.clawSwing = bot.getClawSwing();
-       /* this.intakeLiftLeft = bot.getIntakeLiftLeft();
+        this.intakeLiftLeft = bot.getIntakeLiftLeft();
         this.intakeLiftRight = bot.getIntakeLiftRight();
         this.leftIntake = bot.getIntakeLeft();
-        this.rightIntake = bot.getIntakeRight();*/
+        this.rightIntake = bot.getIntakeRight();
 
-        //this.lift = bot.getLift();
+        this.lift = bot.getLift();
 
-        //Set intake directions
-        /*leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);*/
+        leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+        //TODO Set foundation movers to their up positions.
 
-        //Set foundation movers to their up positions.
+        //TODO Set intakes lifts to their in position.
 
-        //Set intakes lifts to their in position.
+        //TODO Set lift to down position.
 
         return this;
     }

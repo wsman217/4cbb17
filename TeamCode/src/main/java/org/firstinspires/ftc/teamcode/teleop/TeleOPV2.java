@@ -19,7 +19,6 @@ public class TeleOPV2 extends LinearOpMode {
         instance = this;
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        //telemetry.setAutoClear(false);
 
         bot = new Bot().init(this.hardwareMap, this);
         drive = bot.getDrive();
@@ -31,7 +30,8 @@ public class TeleOPV2 extends LinearOpMode {
 
         while(opModeIsActive()) {
             drive.joyStick(gamepad1);
-            /*accessories.intake(gamepad2);*/
+            accessories.intake(gamepad2);
+            accessories.lift(gamepad2);
             if (gamepad1.a)
                 accessories.switchFoundationMover();
             if (gamepad2.a)
@@ -40,8 +40,8 @@ public class TeleOPV2 extends LinearOpMode {
                 accessories.swingClaw();
             if (gamepad2.left_bumper && gamepad2.right_bumper)
                 accessories.dropCapstone();
-            /*if (gamepad2.y)
-                accessories.switchIntakePositions();*/
+            if (gamepad2.y)
+                accessories.switchIntakePositions();
         }
     }
 
