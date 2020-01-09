@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -42,6 +43,7 @@ public class Drive {
         double y1 = -pad.left_stick_y;
         double x1 = pad.left_stick_x;
         double x2 = -pad.right_stick_x;
+        double turbo = Range.clip(pad.left_trigger, .1, 1);
         double wheelFrontRightPower = y1 - x2 - x1;
         double wheelBackRightPower = y1 - x2 + x1;
         double wheelFrontLeftPower = y1 + x2 + x1;
@@ -56,6 +58,12 @@ public class Drive {
             wheelFrontLeftPower /= max;
             wheelBackLeftPower /= max;
         }
+
+        wheelFrontLeftPower *= turbo;
+        wheelFrontRightPower *= turbo;
+        wheelBackLeftPower *= turbo;
+        wheelBackRightPower *= turbo;
+
         if (wheelFrontLeftPower < 0.2 && wheelFrontLeftPower > -0.2)
             wheelFrontLeftPower = 0;
         if (wheelFrontRightPower < 0.2 && wheelFrontRightPower > -0.2)

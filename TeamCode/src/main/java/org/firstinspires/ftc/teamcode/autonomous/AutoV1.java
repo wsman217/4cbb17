@@ -53,16 +53,22 @@ public class AutoV1 extends LinearOpMode {
         while (opModeIsActive() && counter < 3) {
             //Drive to where we are in front of a stone.
 
-            //Move forward till we are within 5-6 inches of a stone.
+            //Move forward till we are within 3-4 inches of a stone.
             distanceStones();
 
             //Test the color of the stones and move if its is a stone
             boolean isStone = senseColor();
             if (!isStone) {
-                drive.rotate(-168, .2);
+                drive.drive(.5, 205.3944, 30);
+                drive.rotate(-168, .5);
+                drive.strafe(Drive.StrafeDirection.RIGHT, .5, 317.5, 30);
+                accessories.switchIntakePositions();
+                accessories.intake(true);
+                drive.drive(.5, 205.3944, 30);
+
             }
 
-            drive.drive(.2, -205.3944, 30);
+            drive.drive(.5, -205.3944, 30);
 
             counter++;
         }
@@ -73,9 +79,9 @@ public class AutoV1 extends LinearOpMode {
             telemetry.addLine("Distance: " + distance.getDistance(DistanceUnit.INCH));
             double pow = distance.getDistance(DistanceUnit.INCH) - 3.5d;
             if (pow > 0)
-                pow = Math.min(.20, pow);
+                pow = Math.min(.5, pow);
             else
-                pow = Math.max(-.20, pow);
+                pow = Math.max(-.5, pow);
             telemetry.addLine("Power" + pow);
             telemetry.update();
             drive.strafeWithPower(Drive.StrafeDirection.LEFT, pow);

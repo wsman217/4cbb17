@@ -129,6 +129,11 @@ public class Accessories {
         rightIntake.setPower(intakeSpeed);
     }
 
+    public void intake(boolean enabled) {
+        leftIntake.setPower(enabled ? 1 : 0);
+        rightIntake.setPower(enabled ? 1 : 0);
+    }
+
     private SwitchHelper switchMethod(long timeToUse, boolean booToUse, double timeout, HashMap<Servo, Integer> servos) {
         if (servos.isEmpty())
             return null;
