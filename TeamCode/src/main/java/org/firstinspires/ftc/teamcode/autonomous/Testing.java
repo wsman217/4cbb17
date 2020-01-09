@@ -19,8 +19,7 @@ public class Testing extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            /*drive.drive(.5, (75 * 10), 30);*/
-            drive.drive(.5, 3227.6, 30);
+            drive.drive(.5, 20000, 30);
         }
     }
 }

@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardwarev2;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Bot {
@@ -27,6 +25,11 @@ public class Bot {
     private Servo foundationMoverLeft;
     private Servo foundationMoverRight;
     private Servo claw, capstone, clawSwing;
+
+    private BNO055IMU imu;
+
+    private ColorSensor color;
+    private DistanceSensor distance;
 
     private OpMode opMode;
 
@@ -51,6 +54,10 @@ public class Bot {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        color = map.get(ColorSensor.class, "color");
+        distance = map.get(DistanceSensor.class, "color");
+
+        imu = map.get(BNO055IMU.class, "imu");
 
         drive = new Drive(this);
         accessories = new Accessories().init(this);
@@ -131,5 +138,17 @@ public class Bot {
 
     public Servo getClawSwing() {
         return clawSwing;
+    }
+
+    public ColorSensor getColor() {
+        return color;
+    }
+
+    public DistanceSensor getDistance() {
+        return distance;
+    }
+
+    public BNO055IMU getImu() {
+        return imu;
     }
 }

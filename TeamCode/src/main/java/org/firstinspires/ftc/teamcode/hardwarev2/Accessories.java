@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardwarev2;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
 
 import java.util.HashMap;
 
@@ -18,6 +15,9 @@ public class Accessories {
     private DcMotor leftIntake, rightIntake;
     private DcMotor lift;
     private OpMode opMode;
+
+    public ColorSensor color;
+    public DistanceSensor distanceSensor;
 
     Accessories init(Bot bot) {
         this.opMode = bot.getOpMode();
@@ -41,6 +41,9 @@ public class Accessories {
         this.rightIntake = bot.getIntakeRight();
 
         this.lift = bot.getLift();
+
+        this.color = bot.getColor();
+        this.distanceSensor = bot.getDistance();
 
         leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         //TODO Set foundation movers to their up positions.
@@ -72,6 +75,8 @@ public class Accessories {
         double target = isClawGripping ? 0 : 1;
         isClawGripping = !isClawGripping;
         claw.setPosition(target);
+        opMode.telemetry.addLine("Switching claw");
+        opMode.telemetry.update();
     }
 
     public void dropCapstone() {
