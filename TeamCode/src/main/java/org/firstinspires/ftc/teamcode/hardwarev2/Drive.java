@@ -21,6 +21,9 @@ public class Drive {
 
     private IMU imu;
 
+    private long turboLC;
+    private boolean turbo = false;
+
     /*private static final double COUNTS_PER_MOTOR_REV = 28d;
     private static final double GEAR_RATIO = 21.52d;
     private static final double WHEEL_DIAMETER_MM = 100d;
@@ -37,13 +40,14 @@ public class Drive {
         this.opMode = (LinearOpMode) bot.getOpMode();
         imu = new IMU(bot);
         this.telem = opMode.telemetry;
+        turboLC = System.currentTimeMillis() / 1000;
     }
 
     public void joyStick(Gamepad pad) {
         double y1 = -pad.left_stick_y;
         double x1 = pad.left_stick_x;
         double x2 = -pad.right_stick_x;
-        double turbo = Range.clip(pad.left_trigger, .1, 1);
+
         double wheelFrontRightPower = y1 - x2 - x1;
         double wheelBackRightPower = y1 - x2 + x1;
         double wheelFrontLeftPower = y1 + x2 + x1;
@@ -59,19 +63,20 @@ public class Drive {
             wheelBackLeftPower /= max;
         }
 
+        double turbo = !this.turbo ? .4 : 1;
         wheelFrontLeftPower *= turbo;
         wheelFrontRightPower *= turbo;
         wheelBackLeftPower *= turbo;
         wheelBackRightPower *= turbo;
 
-        if (wheelFrontLeftPower < 0.2 && wheelFrontLeftPower > -0.2)
+        /*if (wheelFrontLeftPower < 0.2 && wheelFrontLeftPower > -0.2)
             wheelFrontLeftPower = 0;
         if (wheelFrontRightPower < 0.2 && wheelFrontRightPower > -0.2)
             wheelFrontRightPower = 0;
         if (wheelBackLeftPower < 0.2 && wheelBackLeftPower > -0.2)
             wheelBackLeftPower = 0;
         if (wheelBackRightPower < 0.2 && wheelBackRightPower > -0.2)
-            wheelBackRightPower = 0;
+            wheelBackRightPower = 0;*/
 
         leftFront.setPower(wheelFrontLeftPower);
         rightFront.setPower(wheelFrontRightPower);
@@ -102,7 +107,7 @@ public class Drive {
         else if (direction == StrafeDirection.RIGHT_FRONT)
             moveMotors(target, 0, 0, target, speed, timeout);
         else if (direction == StrafeDirection.LEFT_BACK)
-            moveMotors(-target, 0, 0, target, speed, -timeout);
+            moveMotors(-target, 0, 0, - target, speed, timeout);
         else if (direction == StrafeDirection.RIGHT_BACK)
             moveMotors(0, -target, -target, 0, speed, timeout);
     }
@@ -126,6 +131,14 @@ public class Drive {
             moveMotorsWithPower(-speed, 0, 0, speed);
         else if (direction == StrafeDirection.RIGHT_BACK)
             moveMotorsWithPower(0, -speed, -speed, 0);
+    }
+
+    public void switchTurbo() {
+        long current = System.currentTimeMillis() / 1000;
+        if (current - turboLC < .5)
+            return;
+        turboLC = current;
+        turbo = !turbo;
     }
 
     public void stopMotors() {

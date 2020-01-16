@@ -11,16 +11,13 @@ public class TeleOPV2 extends LinearOpMode {
 
     private Drive drive;
     private Accessories accessories;
-    private Bot bot;
-    private static TeleOPV2 instance;
 
     @Override
     public void runOpMode() {
-        instance = this;
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        bot = new Bot().init(this.hardwareMap, this);
+        Bot bot = new Bot().init(this.hardwareMap, this);
         drive = bot.getDrive();
         accessories = bot.getAccessories();
 
@@ -28,24 +25,31 @@ public class TeleOPV2 extends LinearOpMode {
         bot.getPeriod().reset();
         /*accessories.switchIntakePositions();*/
 
-        while(opModeIsActive()) {
-            drive.joyStick(gamepad1);
-            accessories.intake(gamepad2);
-            accessories.lift(gamepad2);
-            if (gamepad1.a)
-                accessories.switchFoundationMover();
-            if (gamepad2.a)
-                accessories.switchClaw();
-            if (gamepad2.b)
-                accessories.swingClaw();
-            if (gamepad2.left_bumper && gamepad2.right_bumper)
-                accessories.dropCapstone();
-            if (gamepad2.y)
-                accessories.switchIntakePositions();
+        while (opModeIsActive()) {
+            gamepad1();
+            gamepad2();
         }
     }
 
-    public static TeleOPV2 getInstance() {
-        return instance;
+    private void gamepad1() {
+        drive.joyStick(gamepad1);
+        if (gamepad1.a)
+            drive.switchTurbo();
+    }
+
+    private void gamepad2() {
+        accessories.runIntake(gamepad2);
+        accessories.lift(gamepad2);
+        if (gamepad2.a)
+            accessories.switchClaw();
+        if (gamepad2.b)
+            accessories.swingClaw();
+        if (gamepad2.left_bumper && gamepad2.right_bumper)
+            accessories.dropCapstone();
+        if (gamepad2.y)
+            accessories.switchIntakePositions();
+        /*if (gamepad1.x)
+            accessories.switchFoundationMover();*/
+
     }
 }

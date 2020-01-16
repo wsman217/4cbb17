@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardwarev2;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -31,9 +32,9 @@ public class Bot {
     private ColorSensor color;
     private DistanceSensor distance;
 
-    private OpMode opMode;
+    private LinearOpMode opMode;
 
-    public Bot init(HardwareMap map, OpMode opMode) {
+    public Bot init(HardwareMap map, LinearOpMode opMode) {
         this.opMode = opMode;
         this.hardwareMap = map;
         leftFront = map.get(DcMotor.class, "leftFront");
@@ -46,8 +47,8 @@ public class Bot {
         intakeRight = map.get(DcMotor.class, "intakeRight");
         intakeLiftLeft = map.get(Servo.class, "intakeLiftLeft");
         intakeLiftRight = map.get(Servo.class, "intakeLiftRight");
-        foundationMoverLeft = map.get(Servo.class, "foundationLeft");
-        foundationMoverRight = map.get(Servo.class, "foundationRight");
+        /*foundationMoverLeft = map.get(Servo.class, "foundationLeft");
+        foundationMoverRight = map.get(Servo.class, "foundationRight");*/
         claw = map.get(Servo.class, "claw");
         capstone = map.get(Servo.class, "capstone");
         clawSwing = map.get(Servo.class, "clawSwing");
@@ -120,7 +121,7 @@ public class Bot {
         return foundationMoverRight;
     }
 
-    OpMode getOpMode() {
+    LinearOpMode getOpMode() {
         return opMode;
     }
 
