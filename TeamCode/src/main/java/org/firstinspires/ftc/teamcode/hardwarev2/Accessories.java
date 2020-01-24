@@ -12,7 +12,7 @@ public class Accessories {
     private static boolean isFoundDown, isIntakeLiftDown, isSwingForward, isClawGripping;
     private static long lastClickedFoundation, lastClickedIntakeLift, lastClickedSwingClaw, lastClickedClaw;
     //private DcMotor linearLift;
-    private Servo /*foundationMoverLeft, foundationMoverRight,*/ intakeLiftLeft, intakeLiftRight;
+    private Servo foundationMoverLeft, foundationMoverRight, intakeLiftLeft, intakeLiftRight;
     private Servo claw, capstone, clawSwing;
     private DcMotor leftIntake, rightIntake;
     private DcMotor lift;
@@ -32,8 +32,8 @@ public class Accessories {
         lastClickedClaw = System.currentTimeMillis() / 1000;
         lastClickedSwingClaw = System.currentTimeMillis() / 1000;
 
-        /*this.foundationMoverLeft = bot.getFoundationMoverLeft();
-        this.foundationMoverRight = bot.getFoundationMoverRight();*/
+        this.foundationMoverLeft = bot.getFoundationMoverLeft();
+        this.foundationMoverRight = bot.getFoundationMoverRight();
         this.claw = bot.getClaw();
         this.capstone = bot.getCapstone();
         this.clawSwing = bot.getClawSwing();
@@ -89,18 +89,23 @@ public class Accessories {
         capstone.setPosition(0);
     }
 
-    /*public void switchFoundationMover() {
+    public void switchFoundationMover() {
         long currentTime = System.currentTimeMillis() / 1000;
         long diff = currentTime - lastClickedFoundation;
         if (diff <= .5)
             return;
         lastClickedFoundation = currentTime;
         double leftTarget = isFoundDown ? 0 : 1;
-        double rightTarget = isFoundDown ? 0 : .5;
+        double rightTarget = isFoundDown ? 1 : 0;
         isFoundDown = !isFoundDown;
         foundationMoverLeft.setPosition(leftTarget);
         foundationMoverRight.setPosition(rightTarget);
-    }*/
+    }
+
+    public void setFoundation(boolean lean) {
+        foundationMoverLeft.setPosition(lean ? 0 : 1);
+        foundationMoverRight.setPosition(lean ? 1 : 0);
+    }
 
     public void switchIntakePositions() {
         /*long currentTime = System.currentTimeMillis() / 1000;

@@ -91,6 +91,28 @@ public class Drive {
         moveMotors(target, target, target, target, speed, timeout);
     }
 
+    public void manualDrive(double flDistance, double flSpeed, double frDistance, double frSpeed, double blDistance, double blSpeed,
+                       double brDistance, double brSpeed, double timeout) {
+        int fLTarget =  (int) (flDistance * COUNTS_PER_MM), fRTarget = (int) (frDistance * COUNTS_PER_MM), bLTarget = (int) (blDistance * COUNTS_PER_MM), bRTarget = (int) (brDistance * COUNTS_PER_MM);
+        leftFront.setTargetPosition(leftFront.getCurrentPosition() + fLTarget);
+        rightFront.setTargetPosition(rightFront.getCurrentPosition() + fRTarget);
+        leftBack.setTargetPosition(leftBack.getCurrentPosition() + bLTarget);
+        rightBack.setTargetPosition(rightBack.getCurrentPosition() + bRTarget);
+
+        setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        time.reset();
+        setPower(Math.abs(flSpeed), Math.abs(frSpeed), Math.abs(blSpeed), Math.abs(brSpeed));
+
+        while (opMode.opModeIsActive() && (time.seconds() < timeout) && ((leftFront.isBusy() || fLTarget == 0) && (rightFront.isBusy() || fRTarget == 0) &&
+                (leftBack.isBusy() || bLTarget == 0) && (rightBack.isBusy() || bRTarget == 0))) {
+            telem.addData("Path1", "Running to %7d :%7d :%7d :%7d", fLTarget, fRTarget, bLTarget, bRTarget);
+            telem.update();
+        }
+
+        setPower(0, 0, 0, 0);
+        setMode((DcMotor.RunMode.RUN_USING_ENCODER));
+    }
+
     public void strafe(StrafeDirection direction, double speed, double distanceInMM, double timeout) {
         if (!opMode.opModeIsActive())
             return;

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.hardwarev2.Bot;
 import org.firstinspires.ftc.teamcode.hardwarev2.Drive;
 
 @Autonomous(name = "Setup Color", group = "autos")
+@Disabled
 public class SetupColor extends LinearOpMode {
     private Bot bot;
     private Drive drive;

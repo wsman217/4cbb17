@@ -48,8 +48,8 @@ public class TeleOPV2 extends LinearOpMode {
             accessories.dropCapstone();
         if (gamepad2.y)
             accessories.switchIntakePositions();
-        /*if (gamepad1.x)
-            accessories.switchFoundationMover();*/
+        if (gamepad2.x)
+            accessories.switchFoundationMover();
 
     }
 }

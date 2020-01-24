@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.tensorflow.InitVuforia;
 import java.util.List;
 
 @Autonomous(group = "Autonomous", name = "Move Skystone")
+@Disabled
 public class MoveSkystones extends LinearOpMode {
     private Bot bot;
     private TFObjectDetector tfod;

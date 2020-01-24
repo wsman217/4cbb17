@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardwarev2.Bot;
 import org.firstinspires.ftc.teamcode.hardwarev2.Drive;
 
 @Autonomous(group = "Autonomous", name = "Testing")
+@Disabled
 public class Testing extends LinearOpMode {
 
     private Bot bot;
